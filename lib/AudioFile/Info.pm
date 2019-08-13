@@ -183,10 +183,11 @@ sub new {
   my $pkg = $param->{$ext};
 
   unless (defined $pkg) {
-    my $config = LoadFile($path);
+    my $config;
+    $config = LoadFile($path) if -f $path;
 
     die "No default $ext file handler\n"
-        unless exists $config->{default}{$ext};
+        unless (defined $config && (exists $config->{default}{$ext}));
 
     $pkg = $config->{default}{$ext}{name};
   }
